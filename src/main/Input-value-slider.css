@@ -1,0 +1,8 @@
+.slider-container{
+    display: flex;
+    justify-content: center;
+}
+
+.p-slider {
+    margin: 10px;
+}

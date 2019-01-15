@@ -1,0 +1,17 @@
+.plan-row {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 5px;
+    border-bottom: 1px solid #d0c0c0;
+}
+
+
+.p-dropdown {
+    margin: 0 5px;
+    text-align: left;
+}
+
+.drpdown_and_title {
+    /* display: grid; */
+    text-align: center;
+}
