@@ -1,0 +1,9 @@
+.chart-container {
+    display: flex;
+    justify-content: center;
+}
+
+.chart-inside {
+    width: 600px;
+ 
+}

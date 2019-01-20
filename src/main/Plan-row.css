@@ -1,8 +1,8 @@
 .plan-row {
     display: flex;
     justify-content: space-evenly;
-    padding: 5px;
-    border-bottom: 1px solid #d0c0c0;
+    /* padding: 1px; */
+    /* border-bottom: 1px solid #d0c0c0; */
 }
 
 
@@ -14,4 +14,13 @@
 .drpdown_and_title {
     /* display: grid; */
     text-align: center;
+}
+
+.result-section{
+    background-color: #e4dbdb;
+    display: flex;
+    margin-left: 10px;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    padding: 0 30px 0 15px;
 }

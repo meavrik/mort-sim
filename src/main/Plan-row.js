@@ -3,6 +3,7 @@ import { Dropdown } from 'primereact/dropdown';
 import './Plan-row.css';
 import { Slider } from 'primereact/slider';
 import { InputText } from "primereact/inputtext";
+import { Spinner } from 'primereact/spinner';
 
 const planItems = [
     { label: 'CPI Linkage', value: 1 },
@@ -13,13 +14,13 @@ const planItems = [
 
 const planReturnItems = [
     { label: 'Shpizer', value: 1 },
-    { label: 'Shpizer1', value: 2 },
-    { label: 'Shpizer2', value: 3 },
+    { label: 'Equal Principal', value: 2 },
+    { label: 'Built', value: 3 },
 ];
 
 const planGraceItems = [
     { label: 'None', value: 1 },
-    { label: 'Half', value: 2 },
+    { label: 'Partial', value: 2 },
     { label: 'Full', value: 3 },
 ];
 
@@ -36,11 +37,15 @@ class PlanRow extends Component {
             plan: 1,
             planGrace: 1,
             planReturn: 1,
-            amount: 0,
-            duration: 0,
-            intrest: 0,
+            amount: 10000,
+            duration: 10,
+            intrest: 0.1,
             years: 10,
             years2: 10,
+
+            resultMonthly: 0,
+            resultTotal: 0,
+            resultReturn: 0,
         }
 
         this.onChangeSlider = this.onChangeSlider.bind(this);
@@ -81,8 +86,8 @@ class PlanRow extends Component {
             <div>
                 <div className="plan-row">
                     <div className="drpdown_and_title">
-                    {this.props.showHeader ? (<p>id</p>) : (<p></p>)}
-                        <p>#{this.props.id}</p>
+                        {this.props.showHeader ? (<p>id</p>) : (<p></p>)}
+                        <p style={{ marginLeft: '10px' }}>#{this.props.id}</p>
                     </div>
                     <div className="drpdown_and_title">
                         {this.props.showHeader ? (<p>Plan</p>) : (<p></p>)}
@@ -124,18 +129,40 @@ class PlanRow extends Component {
 
                     <div className="drpdown_and_title">
                         {this.props.showHeader ? (<p>Amount</p>) : (<p></p>)}
-                        <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.amount} options={planReturnItems} onChange={(e) => { this.setState({ amount: e.value }) }} placeholder="chose amount" />
+                        {/* <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.amount} options={planReturnItems} onChange={(e) => { this.setState({ amount: e.value }) }} placeholder="chose amount" /> */}
+
+                        {/* <InputText value={this.state.amount.toLocaleString()} placeholder="amount" onChange={this.onChangeSlider} style={{ width: '4em' }}/> */}
+                        <Spinner value={this.state.amount} step={100} max={10000000} min={100} onChange={(e) => this.setState({ amount: e.value })} style={{ width: '8em', marginLeft: '5px' }} />
                     </div>
 
                     <div className="drpdown_and_title">
                         {this.props.showHeader ? (<p>Duration</p>) : (<p></p>)}
-                        <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.duration} options={planReturnItems} onChange={(e) => { this.setState({ duration: e.value }) }} placeholder="chose duration" />
+                        <Spinner value={this.state.duration} max={30} min={2} onChange={(e) => this.setState({ duration: e.value })} style={{ width: '5em', marginLeft: '5px' }} />
                     </div>
 
                     <div className="drpdown_and_title">
                         {this.props.showHeader ? (<p>Intrest</p>) : (<p></p>)}
-                        <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.intrest} options={planReturnItems} onChange={(e) => { this.setState({ intrest: e.value }) }} placeholder="chose intrest" />
+                        <Spinner value={this.state.intrest} step={0.01} max={10} min={-10} onChange={(e) => this.setState({ intrest: e.value })} style={{ width: '5em', marginLeft: '5px' }} />
                     </div>
+
+
+                    <div className="result-section">
+                        <div className="drpdown_and_title">
+                            {this.props.showHeader ? (<p>Monthly</p>) : (<p></p>)}
+                            <InputText disabled={!this.state.resultMonthly} value={this.state.resultMonthly} style={{ width: '4em', marginLeft: '15px' }} type="number" />
+                        </div>
+
+                        <div className="drpdown_and_title">
+                            {this.props.showHeader ? (<p>Total</p>) : (<p></p>)}
+                            <InputText disabled={!this.state.resultTotal} value={this.state.resultTotal} style={{ width: '4em', marginLeft: '15px' }} type="number" />
+                        </div>
+
+                        <div className="drpdown_and_title">
+                            {this.props.showHeader ? (<p>Return %</p>) : (<p></p>)}
+                            <InputText disabled={!this.state.resultReturn} value={this.state.resultReturn} style={{ width: '4em', marginLeft: '15px' }} type="number" />
+                        </div>
+                    </div>
+
                 </div>
             </div>)
 
