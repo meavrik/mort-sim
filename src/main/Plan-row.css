@@ -24,3 +24,8 @@
     border-right: 1px solid gray;
     padding: 0 30px 0 15px;
 }
+
+.column-title {
+    padding: 5px 0;
+    background-color: #e4dbdb;
+}

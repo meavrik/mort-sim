@@ -10,6 +10,7 @@ import { SelectButton } from 'primereact/selectbutton';
 import PlanRow from './Plan-row';
 import LineChart from './charts/results-chart';
 import InputValueSlider from './Input-value-slider';
+import CardHeader from './components/Card-header';
 
 const dataSets = [
     {
@@ -94,9 +95,6 @@ const dataSets = [
     }
 ]
 
-
-
-
 const selectItems = [
     { label: 'User Defined', value: 'User Defined' },
     { label: 'No risk', value: 'No risk' },
@@ -114,12 +112,12 @@ const senarioItems = [
 ];
 
 
-
 class MainView extends Component {
     constructor() {
         super();
         this.state = {
-
+            initialMortgageAmount: 1000000,
+            initialMonthlyAmount: 3000,
             selectedChartData: dataSets[0],
             type: 'User Defined',
             secnario: 0,
@@ -127,11 +125,26 @@ class MainView extends Component {
             price: null,
             amount: 600000,
 
-            finalAmount:2000000,
-            finalMonthly:6000,
-            finalIntrest:14,
-            finalReturnAmount:2200000,
+            finalAmount: 1000000,
+            finalMonthly: 3000,
+            finalIntrest: 14,
+            finalReturnAmount: 2200000,
         }
+
+        this.handleFieldChange = this.handleFieldChange.bind(this);
+        this.handleFieldChange2 = this.handleFieldChange2.bind(this);
+
+        this.setState({ finalAmount: this.state.initialMortgageAmount })
+        this.setState({ finalMonthly: this.state.initialMonthlyAmount })
+    }
+
+    handleFieldChange(event) {
+        this.setState({ finalAmount: event })
+        this.setState({ finalReturnAmount: Math.floor(event*1.4)  })
+    }
+
+    handleFieldChange2(event) {
+        this.setState({ finalMonthly: event })
     }
 
     render() {
@@ -140,13 +153,13 @@ class MainView extends Component {
             <div>
                 <div className="content-section implementation">
 
-
                     <div className="p-grid p-fluid row" >
-                        <header className="card-title">Mortgage details</header>
+
+                        <CardHeader title='Mortgage details'></CardHeader>
 
                         <div className="card-content">
-                            <InputValueSlider minValue={30000} maxValue={20000000} title='Select Mortgage amount'></InputValueSlider>
-                            <InputValueSlider minValue={100} maxValue={100000} title='Monthly payment'></InputValueSlider>
+                            <InputValueSlider onChange={this.handleFieldChange} minValue={30000} maxValue={10000000} amount={this.state.initialMortgageAmount} title='Select Mortgage amount'></InputValueSlider>
+                            <InputValueSlider onChange={this.handleFieldChange2} minValue={500} maxValue={10000} amount={this.state.initialMonthlyAmount} title='Monthly payment'></InputValueSlider>
                         </div>
                     </div>
 
@@ -160,7 +173,8 @@ class MainView extends Component {
                     </header>
 
                     <div className="p-grid p-fluid">
-                        <header className="card-title">Mortgage plans</header>
+                        {/* <header className="card-title">Mortgage plans</header> */}
+                        <CardHeader title='Mortgage plans'></CardHeader>
                         <div className="card-content">
                             <div>
                                 <PlanRow id={1} showHeader='true'></PlanRow>
@@ -171,26 +185,27 @@ class MainView extends Component {
                     </div>
 
                     <div className="p-grid p-fluid">
-                        <header className="card-title">Total load details</header>
-                        <div className="card-content" style={{justifyContent:'space-evenly'}}>
+                        {/* <header className="card-title">Your loan summary</header> */}
+                        <CardHeader title='Your loan summary'></CardHeader>
+                        <div className="card-content" style={{ justifyContent: 'space-evenly' }}>
                             <div>
-                                <h3>total amount : </h3>
-                                <p>{this.state.finalAmount.toLocaleString()}</p>
+                                <h3>total amount</h3>
+                                <p className="amount-label">{this.state.finalAmount.toLocaleString()}</p>
                             </div>
 
                             <div>
-                                <h3>monthly payment : </h3>
-                                <p>{this.state.finalMonthly.toLocaleString()}</p>
+                                <h3>monthly payment</h3>
+                                <p className="amount-label">{this.state.finalMonthly.toLocaleString()}</p>
                             </div>
 
                             <div>
-                                <h3>total return : </h3>
-                                <p>{this.state.finalReturnAmount.toLocaleString()}</p>
+                                <h3>total return </h3>
+                                <p className="amount-label">{this.state.finalReturnAmount.toLocaleString()}</p>
                             </div>
 
                             <div>
-                                <h3>intrest : </h3>
-                                <p>{this.state.finalIntrest}%</p>
+                                <h3>intrest </h3>
+                                <p className="amount-label">{this.state.finalIntrest}%</p>
                             </div>
                         </div>
                     </div>
@@ -198,7 +213,8 @@ class MainView extends Component {
 
 
                     <div className="p-grid p-fluid">
-                        <header className="card-title">Total payments</header>
+                        {/* <header className="card-title">Loan Payments Prediction</header> */}
+                        <CardHeader title='Loan Payments Prediction'></CardHeader>
                         <div className="card-content" style={{ display: 'block' }}>
                             <div className="plan-header">
                                 <SelectButton value={this.state.secnario} options={senarioItems} onChange={(e) => {

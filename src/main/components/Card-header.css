@@ -1,0 +1,12 @@
+.card-title {
+    background-color: orange;
+    padding: 5px 0;
+    color: white;
+    margin: 0;
+}
+
+.info-button {
+    float: right;
+    margin-right: 3px;
+    cursor: pointer;
+}

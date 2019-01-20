@@ -11,7 +11,6 @@ const planItems = [
 
 ];
 
-
 const planReturnItems = [
     { label: 'Shpizer', value: 1 },
     { label: 'Equal Principal', value: 2 },
@@ -86,16 +85,16 @@ class PlanRow extends Component {
             <div>
                 <div className="plan-row">
                     <div className="drpdown_and_title">
-                        {this.props.showHeader ? (<p>id</p>) : (<p></p>)}
+                        {this.props.showHeader ? (<p className='column-title'>id</p>) : (<p></p>)}
                         <p style={{ marginLeft: '10px' }}>#{this.props.id}</p>
                     </div>
                     <div className="drpdown_and_title">
-                        {this.props.showHeader ? (<p>Plan</p>) : (<p></p>)}
+                        {this.props.showHeader ? (<p className='column-title'>Plan</p>) : (<p></p>)}
                         <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.plan} options={planItems} onChange={(e) => { this.setState({ plan: e.value }) }} placeholder="Select a plan" />
                     </div>
 
                     <div className="drpdown_and_title">
-                        {this.props.showHeader ? (<p>Var years</p>) : (<p></p>)}
+                        {this.props.showHeader ? (<p className='column-title'>Var years</p>) : (<p></p>)}
                         {/* <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.plan} options={yearList} onChange={(e) => { this.setState({ years: e.value }) }} placeholder="var years" /> */}
                         {/* <InputText value={this.state.years} style={{width: '4em'}} type="number" onChange={this.onChangeSlider} /> */}
                         <span className="slider-container">
@@ -106,18 +105,18 @@ class PlanRow extends Component {
                     </div>
 
                     <div className="drpdown_and_title">
-                        {this.props.showHeader ? (<p>Return</p>) : (<p></p>)}
+                        {this.props.showHeader ? (<p className='column-title'>Return</p>) : (<p></p>)}
                         <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.planReturn} options={planReturnItems} onChange={(e) => { this.setState({ planReturn: e.value }) }} placeholder="Return" />
 
                     </div>
 
                     <div className="drpdown_and_title">
-                        {this.props.showHeader ? (<p>Grace</p>) : (<p></p>)}
+                        {this.props.showHeader ? (<p className='column-title'>Grace</p>) : (<p></p>)}
                         <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.planGrace} options={planGraceItems} onChange={(e) => { this.setState({ planGrace: e.value }) }} placeholder="Grace" />
                     </div>
 
                     <div className="drpdown_and_title">
-                        {this.props.showHeader ? (<p>years</p>) : (<p></p>)}
+                        {this.props.showHeader ? (<p className='column-title'>years</p>) : (<p></p>)}
                         {/* <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.plan} options={yearList} onChange={(e) => { this.setState({ years: e.value }) }} placeholder="var years" /> */}
                         {/*  <InputText disabled={this.state.planGrace===1} value={this.state.years2} style={{width: '4em'}} type="number" onChange={this.onChangeSlider2} /> */}
 
@@ -128,7 +127,7 @@ class PlanRow extends Component {
                     </div>
 
                     <div className="drpdown_and_title">
-                        {this.props.showHeader ? (<p>Amount</p>) : (<p></p>)}
+                        {this.props.showHeader ? (<p className='column-title'>Amount</p>) : (<p></p>)}
                         {/* <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.amount} options={planReturnItems} onChange={(e) => { this.setState({ amount: e.value }) }} placeholder="chose amount" /> */}
 
                         {/* <InputText value={this.state.amount.toLocaleString()} placeholder="amount" onChange={this.onChangeSlider} style={{ width: '4em' }}/> */}
@@ -136,29 +135,29 @@ class PlanRow extends Component {
                     </div>
 
                     <div className="drpdown_and_title">
-                        {this.props.showHeader ? (<p>Duration</p>) : (<p></p>)}
+                        {this.props.showHeader ? (<p className='column-title'>Duration</p>) : (<p></p>)}
                         <Spinner value={this.state.duration} max={30} min={2} onChange={(e) => this.setState({ duration: e.value })} style={{ width: '5em', marginLeft: '5px' }} />
                     </div>
 
                     <div className="drpdown_and_title">
-                        {this.props.showHeader ? (<p>Intrest</p>) : (<p></p>)}
+                        {this.props.showHeader ? (<p className='column-title'>Intrest</p>) : (<p></p>)}
                         <Spinner value={this.state.intrest} step={0.01} max={10} min={-10} onChange={(e) => this.setState({ intrest: e.value })} style={{ width: '5em', marginLeft: '5px' }} />
                     </div>
 
 
                     <div className="result-section">
                         <div className="drpdown_and_title">
-                            {this.props.showHeader ? (<p>Monthly</p>) : (<p></p>)}
+                            {this.props.showHeader ? (<p className='column-title'>Monthly</p>) : (<p></p>)}
                             <InputText disabled={!this.state.resultMonthly} value={this.state.resultMonthly} style={{ width: '4em', marginLeft: '15px' }} type="number" />
                         </div>
 
                         <div className="drpdown_and_title">
-                            {this.props.showHeader ? (<p>Total</p>) : (<p></p>)}
+                            {this.props.showHeader ? (<p className='column-title'>Total</p>) : (<p></p>)}
                             <InputText disabled={!this.state.resultTotal} value={this.state.resultTotal} style={{ width: '4em', marginLeft: '15px' }} type="number" />
                         </div>
 
                         <div className="drpdown_and_title">
-                            {this.props.showHeader ? (<p>Return %</p>) : (<p></p>)}
+                            {this.props.showHeader ? (<p className='column-title'>Return %</p>) : (<p></p>)}
                             <InputText disabled={!this.state.resultReturn} value={this.state.resultReturn} style={{ width: '4em', marginLeft: '15px' }} type="number" />
                         </div>
                     </div>

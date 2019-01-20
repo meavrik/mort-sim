@@ -11,10 +11,16 @@ class InputValueSlider extends Component {
         }
 
         this.onChangeSlider = this.onChangeSlider.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+   
+       
     }
 
     componentDidMount() {
-        this.setState({ amount: this.props.minValue });
+        this.setState({ amount: this.props.amount });
     }
 
     onChangeSlider(e) {
@@ -27,10 +33,12 @@ class InputValueSlider extends Component {
         }
 
         this.setState({ amount: newValue });
+
+        this.props.onChange(this.state.amount, newValue);
     }
 
     render() {
-        
+
         return (
 
             <div className="p-col-12 p-md-4">
@@ -53,18 +61,9 @@ class InputValueSlider extends Component {
                         </span>
 
                     </div>
-
                 </div>
-
             </div>)
-
-            
     }
-
-
-
-    
 }
-
 
 export default InputValueSlider;
