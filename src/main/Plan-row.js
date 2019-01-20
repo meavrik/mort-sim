@@ -18,23 +18,22 @@ const planReturnItems = [
 ];
 
 const planGraceItems = [
-    { label: 'None', value: 1 },
-    { label: 'Partial', value: 2 },
-    { label: 'Full', value: 3 },
+    { label: 'Partial', value: 1 },
+    { label: 'Full', value: 2 },
 ];
 
 let yearList = new Array(30)
 
 class PlanRow extends Component {
-    constructor() {
+    constructor(props) {
 
-        super();
+        super(props);
 
         yearList = [...yearList].map((a, index) => { return { label: index + 1, value: index + 1 } });
 
         this.state = {
             plan: 1,
-            planGrace: 1,
+            planGrace: null,
             planReturn: 1,
             amount: 10000,
             duration: 10,
@@ -75,11 +74,23 @@ class PlanRow extends Component {
         this.setState({ years2: newValue });
     }
 
+    componentDidMount() {
+        this.setState({ planGrace: this.props.data.planGrace })
+        this.setState({ planReturn: this.props.data.planReturn })
+        this.setState({ plan: this.props.data.plan })
+        //this.setState({ amount: this.props.data.amount })
+        this.setState({ years: this.props.data.years })
+        this.setState({ years2: this.props.data.years2 })
+        this.setState({ intrest: this.props.data.intrest })
+    }
+
+    componentWillReceiveProps() {
+        this.setState({ amount: this.props.data.amount })
+    }
+
     render() {
-        let header = (<div>test</div>);
-
-
-
+        // let header = (<div>test</div>);
+        const data = this.props.data;
         // if (this.props.showHeader)
         return (
             <div>
@@ -90,7 +101,7 @@ class PlanRow extends Component {
                     </div>
                     <div className="drpdown_and_title">
                         {this.props.showHeader ? (<p className='column-title'>Plan</p>) : (<p></p>)}
-                        <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.plan} options={planItems} onChange={(e) => { this.setState({ plan: e.value }) }} placeholder="Select a plan" />
+                        <Dropdown tooltip='lorem ipsum' showClear={true} value={data.plan} options={planItems} onChange={(e) => { this.setState({ plan: e.value }) }} placeholder="Select a plan" />
                     </div>
 
                     <div className="drpdown_and_title">
@@ -106,13 +117,13 @@ class PlanRow extends Component {
 
                     <div className="drpdown_and_title">
                         {this.props.showHeader ? (<p className='column-title'>Return</p>) : (<p></p>)}
-                        <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.planReturn} options={planReturnItems} onChange={(e) => { this.setState({ planReturn: e.value }) }} placeholder="Return" />
+                        <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.planReturn} options={planReturnItems} onChange={(e) => { this.setState({ planReturn: e.value }) }} placeholder="Select return" />
 
                     </div>
 
                     <div className="drpdown_and_title">
                         {this.props.showHeader ? (<p className='column-title'>Grace</p>) : (<p></p>)}
-                        <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.planGrace} options={planGraceItems} onChange={(e) => { this.setState({ planGrace: e.value }) }} placeholder="Grace" />
+                        <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.planGrace} options={planGraceItems} onChange={(e) => { this.setState({ planGrace: e.value }) }} placeholder="None" />
                     </div>
 
                     <div className="drpdown_and_title">
@@ -121,7 +132,7 @@ class PlanRow extends Component {
                         {/*  <InputText disabled={this.state.planGrace===1} value={this.state.years2} style={{width: '4em'}} type="number" onChange={this.onChangeSlider2} /> */}
 
                         <span className="slider-container">
-                            <Slider disabled={this.state.planGrace === 1} value={this.state.years2} max={30} min={5} onChange={this.onChangeSlider2} style={{ width: '4em' }} />
+                            <Slider disabled={!data.planGrace} value={this.state.years2} max={30} min={5} onChange={this.onChangeSlider2} style={{ width: '4em' }} />
                             <p>{this.state.years2}</p>
                         </span>
                     </div>
@@ -165,12 +176,12 @@ class PlanRow extends Component {
                 </div>
             </div>)
 
-        return (<div className="plan-row">
+        /* return (<div className="plan-row">
             <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.plan} options={planItems} onChange={(e) => { this.setState({ plan: e.value }) }} placeholder="Select a plan" />
             <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.plan} options={yearList} onChange={(e) => { this.setState({ years: e.value }) }} placeholder="var years" />
             <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.planGrace} options={planGraceItems} onChange={(e) => { this.setState({ planGrace: e.value }) }} placeholder="Grace" />
             <Dropdown tooltip='lorem ipsum' showClear={true} value={this.state.planReturn} options={planReturnItems} onChange={(e) => { this.setState({ planReturn: e.value }) }} placeholder="Return" />
-        </div>)
+        </div>) */
     }
 }
 

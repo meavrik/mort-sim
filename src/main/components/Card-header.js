@@ -16,7 +16,7 @@ class CardHeader extends Component {
             <div>
                 <header className="card-title">{this.props.title}
                     {/* <Button className="p-button-info" tooltip='help' style={{ marginRight: '3px', float: 'right', fontSize: '8px' }} icon="pi pi-info" /> */}
-                    <i class="pi pi-question-circle info-button"></i>
+                    <i className="pi pi-question-circle info-button"></i>
                 </header>
             </div>
         )

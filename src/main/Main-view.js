@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import './Main-view.css';
 
-import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { Checkbox } from "primereact/checkbox";
-import { RadioButton } from "primereact/radiobutton";
-
 import { SelectButton } from 'primereact/selectbutton';
 import PlanRow from './Plan-row';
 import LineChart from './charts/results-chart';
@@ -129,22 +125,63 @@ class MainView extends Component {
             finalMonthly: 3000,
             finalIntrest: 14,
             finalReturnAmount: 2200000,
+            plans: [
+            ]
         }
+
+        //this.updatePlans();
 
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.handleFieldChange2 = this.handleFieldChange2.bind(this);
+        this.updatePlans = this.updatePlans.bind(this);
+    }
+
+    componentDidMount() {
 
         this.setState({ finalAmount: this.state.initialMortgageAmount })
         this.setState({ finalMonthly: this.state.initialMonthlyAmount })
+        //this.updatePlans();
+        const totalPlans = 3;
+
+        let plans = []
+        for (let i = 0; i < totalPlans; i++) {
+            let newPlan = {
+                plan: 1,
+                planGrace: null,
+                planReturn: 1,
+                amount: Math.round(this.state.finalAmount / totalPlans),
+                duration: 10,
+                intrest: 0.1,
+                years: 10,
+                years2: 10,
+            }
+            plans.push(newPlan);
+        }
+
+        this.setState({ plans: plans });
+    }
+
+    updatePlans() {
+        let plans = [...this.state.plans];
+
+        plans.forEach(plan => {
+            plan.amount = Math.round(this.state.finalAmount / plans.length);
+        })
+ 
+        this.setState({ plans: plans });
     }
 
     handleFieldChange(event) {
         this.setState({ finalAmount: event })
-        this.setState({ finalReturnAmount: Math.floor(event*1.4)  })
+        this.setState({ finalReturnAmount: Math.floor(event * 1.4) });
+
+        this.updatePlans();
     }
 
     handleFieldChange2(event) {
-        this.setState({ finalMonthly: event })
+        this.setState({ finalMonthly: event });
+
+        this.updatePlans();
     }
 
     render() {
@@ -177,9 +214,14 @@ class MainView extends Component {
                         <CardHeader title='Mortgage plans'></CardHeader>
                         <div className="card-content">
                             <div>
-                                <PlanRow id={1} showHeader='true'></PlanRow>
+                                {/* <PlanRow id={1} showHeader='true'></PlanRow>
                                 <PlanRow id={2}></PlanRow>
-                                <PlanRow id={3}></PlanRow>
+                                <PlanRow id={3}></PlanRow> */}
+                                {this.state.plans ? this.state.plans.map((data, index) => {
+                                    return (
+                                        <PlanRow key={index} data={data} id={index}></PlanRow>);
+                                }) : (<div></div>)
+                                }
                             </div>
                         </div>
                     </div>
@@ -219,7 +261,7 @@ class MainView extends Component {
                             <div className="plan-header">
                                 <SelectButton value={this.state.secnario} options={senarioItems} onChange={(e) => {
                                     this.setState({ secnario: e.value });
-                                    this.state.selectedChartData = dataSets[e.value]
+                                    //this.state.selectedChartData = dataSets[e.value]
                                 }}></SelectButton>
 
                                 <Button tooltip='Edit Scenario' style={{ marginLeft: '5px' }} icon="pi pi-pencil" />
