@@ -12,12 +12,6 @@
     margin-top: 2px;
     margin-bottom: 2px;
 }
-/* .card-title {
-    background-color: orange;
-    padding: 5px 0;
-    color: white;
-    margin: 0;
-} */
 
 .card-content {
     display: flex;
@@ -29,20 +23,19 @@
 }
 
 .btn {
-    margin-left:5px !important;
+    margin-left: 5px !important;
 }
-
 
 .plan-header {
     display: flex;
-    text-align:center;
+    text-align: center;
     padding: 5px;
-   justify-items: auto;
-   justify-content: center
+    justify-items: auto;
+    justify-content: center
 }
 
 .a-title {
-    margin:15px 0;
+    margin: 15px 0;
 }
 
 h3 {

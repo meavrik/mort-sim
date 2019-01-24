@@ -7,6 +7,8 @@ import PlanRow from './Plan-row';
 import LineChart from './charts/results-chart';
 import InputValueSlider from './Input-value-slider';
 import CardHeader from './components/Card-header';
+import { autoConfigItems, scenarioItems } from './consts';
+
 
 const dataSets = [
     {
@@ -91,23 +93,6 @@ const dataSets = [
     }
 ]
 
-const selectItems = [
-    { label: 'User Defined', value: 'User Defined' },
-    { label: 'No risk', value: 'No risk' },
-    { label: 'Low Risk', value: 'Low Risk' },
-    { label: 'Low Risk+', value: 'Low Risk+' },
-    { label: 'Balanced', value: 'Balanced' },
-    { label: 'Bank', value: 'Bank' },
-    { label: 'Reconmended for you', value: 'Reconmended' }
-];
-
-const senarioItems = [
-    { label: 'Optemistic', value: 0, icon: 'fas fa-sad-tear' },
-    { label: 'Reasonable', value: 1 },
-    { label: 'Pessimistic', value: 2 },
-];
-
-
 class MainView extends Component {
     constructor() {
         super();
@@ -115,7 +100,7 @@ class MainView extends Component {
             initialMortgageAmount: 1000000,
             initialMonthlyAmount: 3000,
             selectedChartData: dataSets[0],
-            type: 'User Defined',
+            type: 1,
             secnario: 0,
             username: null,
             price: null,
@@ -129,23 +114,63 @@ class MainView extends Component {
             ]
         }
 
-        //this.updatePlans();
-
-        this.handleFieldChange = this.handleFieldChange.bind(this);
-        this.handleFieldChange2 = this.handleFieldChange2.bind(this);
+        this.handleFullAmountChange = this.handleFullAmountChange.bind(this);
+        this.handleMonthlyAmountChange = this.handleMonthlyAmountChange.bind(this);
         this.updatePlans = this.updatePlans.bind(this);
+        this.updateChartData = this.updateChartData.bind(this);
+    }
+
+    generateData = () => {
+
+        let numData = Array.from({ length: 8 }, () => Math.floor(Math.random() * 40));
+        return numData;
+    }
+
+    updateChartData() {
+
+        let newData = {
+            labels: ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'],
+
+            datasets: [
+                {
+                    label: 'Plan #1',
+                    data: this.generateData(),
+                    fill: false,
+                    backgroundColor: '#42A5F5',
+                    borderColor: '#42A5F5'
+                },
+                {
+                    label: 'Plan #2',
+                    data: this.generateData(),
+                    fill: false,
+                    backgroundColor: '#66BB6A',
+                    borderColor: '#66BB6A'
+                }
+                ,
+                {
+                    label: 'Plan #3',
+                    data: this.generateData(),
+                    fill: false,
+                    backgroundColor: '#66BB6A',
+                    borderColor: '#66BB6A'
+                }
+            ]
+        }
+
+        this.setState({ selectedChartData: newData });
     }
 
     componentDidMount() {
 
         this.setState({ finalAmount: this.state.initialMortgageAmount })
         this.setState({ finalMonthly: this.state.initialMonthlyAmount })
-        //this.updatePlans();
+
         const totalPlans = 3;
 
         let plans = []
         for (let i = 0; i < totalPlans; i++) {
             let newPlan = {
+                id: i,
                 plan: 1,
                 planGrace: null,
                 planReturn: 1,
@@ -153,7 +178,10 @@ class MainView extends Component {
                 duration: 10,
                 intrest: 0.1,
                 years: 10,
-                years2: 10,
+                graceYears: 10,
+                resultReturn:0,
+                resultTotal:0,
+                resultMonthly:0,
             }
             plans.push(newPlan);
         }
@@ -166,21 +194,45 @@ class MainView extends Component {
 
         plans.forEach(plan => {
             plan.amount = Math.round(this.state.finalAmount / plans.length);
+
+            plan.resultMonthly = Math.round(this.state.finalMonthly / plans.length);
+            plan.resultTotal = plan.amount;
+            plan.resultReturn = plan.intrest;
         })
- 
+
         this.setState({ plans: plans });
+        
+        this.updateChartData();
     }
 
-    handleFieldChange(event) {
+    handleFullAmountChange(event) {
         this.setState({ finalAmount: event })
         this.setState({ finalReturnAmount: Math.floor(event * 1.4) });
 
         this.updatePlans();
     }
 
-    handleFieldChange2(event) {
+    handleMonthlyAmountChange(event) {
         this.setState({ finalMonthly: event });
 
+        this.updatePlans();
+    }
+
+    onSliderChange(event, data, param) {
+
+        let newPlans = [...this.state.plans];
+        newPlans.filter(a => a === data).forEach(a => { data[param] = event.value })
+        this.setState({ plans: newPlans });
+    }
+
+    onParamChange(event, data) {
+
+        let newPlans = [...this.state.plans];
+        newPlans.filter(a => a === data).forEach(a => { data[event.target.name] = event.value })
+        this.setState({ plans: newPlans });
+
+       
+        //this.updateChartData();
         this.updatePlans();
     }
 
@@ -195,14 +247,22 @@ class MainView extends Component {
                         <CardHeader title='Mortgage details'></CardHeader>
 
                         <div className="card-content">
-                            <InputValueSlider onChange={this.handleFieldChange} minValue={30000} maxValue={10000000} amount={this.state.initialMortgageAmount} title='Select Mortgage amount'></InputValueSlider>
-                            <InputValueSlider onChange={this.handleFieldChange2} minValue={500} maxValue={10000} amount={this.state.initialMonthlyAmount} title='Monthly payment'></InputValueSlider>
+                            <InputValueSlider onChange={this.handleFullAmountChange} minValue={30000} maxValue={10000000} amount={this.state.initialMortgageAmount} title='Select Mortgage amount'></InputValueSlider>
+                            <InputValueSlider onChange={this.handleMonthlyAmountChange} minValue={500} maxValue={10000} amount={this.state.initialMonthlyAmount} title='Monthly payment'></InputValueSlider>
                         </div>
                     </div>
 
                     <header className="plan-header">
 
-                        <SelectButton value={this.state.type} options={selectItems} onChange={(e) => this.setState({ type: e.value })}></SelectButton>
+                        <SelectButton value={this.state.type} options={autoConfigItems} onChange={(e) => {
+                            this.setState({ type: e.value });
+                            this.state.plans.forEach(a => {
+                                a.planReturn = Math.round(Math.random() * 3) + 1;
+                                a.plan = Math.round(Math.random() * 2) + 1;
+
+                            })
+                        }
+                        }></SelectButton>
 
                         <Button className="p-button-raised btn" icon="pi pi-cog" />
                         <Button className="p-button-raised btn" icon="pi pi-bookmark" />
@@ -214,13 +274,19 @@ class MainView extends Component {
                         <CardHeader title='Mortgage plans'></CardHeader>
                         <div className="card-content">
                             <div>
-                                {/* <PlanRow id={1} showHeader='true'></PlanRow>
-                                <PlanRow id={2}></PlanRow>
-                                <PlanRow id={3}></PlanRow> */}
-                                {this.state.plans ? this.state.plans.map((data, index) => {
+                                {this.state.plans.map(data => {
                                     return (
-                                        <PlanRow key={index} data={data} id={index}></PlanRow>);
-                                }) : (<div></div>)
+                                        <PlanRow
+                                            id={data.id}
+                                            key={data.id}
+                                            data={data}
+                                            showHeader={!data.id}
+                                            onParamChange={(event) => this.onParamChange(event, data)}
+                                            changeSlider={(event) => this.onSliderChange(event, data, 'years')}
+                                            changeSlider2={(event) => this.onSliderChange(event, data, 'graceYears')}
+                                        >
+                                        </PlanRow>);
+                                })
                                 }
                             </div>
                         </div>
@@ -252,16 +318,14 @@ class MainView extends Component {
                         </div>
                     </div>
 
-
-
                     <div className="p-grid p-fluid">
                         {/* <header className="card-title">Loan Payments Prediction</header> */}
                         <CardHeader title='Loan Payments Prediction'></CardHeader>
                         <div className="card-content" style={{ display: 'block' }}>
                             <div className="plan-header">
-                                <SelectButton value={this.state.secnario} options={senarioItems} onChange={(e) => {
+                                <SelectButton value={this.state.secnario} options={scenarioItems} onChange={(e) => {
                                     this.setState({ secnario: e.value });
-                                    //this.state.selectedChartData = dataSets[e.value]
+                                    this.setState({ selectedChartData: dataSets[e.value] });
                                 }}></SelectButton>
 
                                 <Button tooltip='Edit Scenario' style={{ marginLeft: '5px' }} icon="pi pi-pencil" />
@@ -272,7 +336,7 @@ class MainView extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         );
     }
 }

@@ -1,10 +1,7 @@
 .plan-row {
     display: flex;
-    justify-content: space-evenly;
-    /* padding: 1px; */
-    /* border-bottom: 1px solid #d0c0c0; */
+    justify-content: flex-end;
 }
-
 
 .p-dropdown {
     margin: 0 5px;
@@ -28,4 +25,5 @@
 .column-title {
     padding: 5px 0;
     background-color: #e4dbdb;
+    border-bottom: 2px solid black;
 }
