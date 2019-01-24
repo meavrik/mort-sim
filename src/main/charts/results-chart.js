@@ -4,7 +4,7 @@ import './results-chart.css';
 
 const options = {
     animation: {
-        duration:100
+        duration:0
     },
     elements: {
         line: {

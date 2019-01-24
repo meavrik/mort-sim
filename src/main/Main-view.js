@@ -9,97 +9,13 @@ import InputValueSlider from './Input-value-slider';
 import CardHeader from './components/Card-header';
 import { autoConfigItems, scenarioItems } from './consts';
 
-
-const dataSets = [
-    {
-        labels: ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'],
-
-        datasets: [
-            {
-                label: 'Plan #1',
-                data: [30, 29, 20, 21, 26, 25, 20, 0],
-                fill: false,
-                backgroundColor: '#42A5F5',
-                borderColor: '#42A5F5'
-            },
-            {
-                label: 'Plan #2',
-                data: [30, 48, 40, 19, 21, 27, 18, 0],
-                fill: false,
-                backgroundColor: '#66BB6A',
-                borderColor: '#66BB6A'
-            }
-            ,
-            {
-                label: 'Plan #3',
-                data: [30, 45, 42, 17, 18, 21, 15, 0],
-                fill: false,
-                backgroundColor: '#66BB6A',
-                borderColor: '#66BB6A'
-            }
-        ]
-    }, {
-        labels: ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'],
-        datasets: [
-            {
-                label: 'Plan #1',
-                data: [5, 5, 5, 5, 5, 5, 5, 0],
-                fill: false,
-                backgroundColor: '#42A5F5',
-                borderColor: '#42A5F5'
-            },
-            {
-                label: 'Plan #2',
-                data: [30, 48, 40, 19, 21, 27, 18, 0],
-                fill: false,
-                backgroundColor: '#66BB6A',
-                borderColor: '#66BB6A'
-            }
-            ,
-            {
-                label: 'Plan #3',
-                data: [30, 45, 42, 17, 18, 21, 15, 0],
-                fill: false,
-                backgroundColor: '#66BB6A',
-                borderColor: '#66BB6A'
-            }
-        ]
-    }, {
-        labels: ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'],
-        datasets: [
-            {
-                label: 'Plan #1',
-                data: [5, 5, 5, 5, 5, 5, 5, 0],
-                fill: false,
-                backgroundColor: '#42A5F5',
-                borderColor: '#42A5F5'
-            },
-            {
-                label: 'Plan #2',
-                data: [15, 48, 15, 19, 21, 27, 18, 0],
-                fill: false,
-                backgroundColor: '#66BB6A',
-                borderColor: '#66BB6A'
-            }
-            ,
-            {
-                label: 'Plan #3',
-                data: [30, 15, 32, 17, 18, 21, 15, 0],
-                fill: false,
-                backgroundColor: '#66BB6A',
-                borderColor: '#66BB6A'
-            }
-        ]
-    }
-]
-
 class MainView extends Component {
     constructor() {
         super();
         this.state = {
             initialMortgageAmount: 1000000,
             initialMonthlyAmount: 3000,
-            selectedChartData: dataSets[0],
+            selectedChartData: null,
             type: 1,
             secnario: 0,
             username: null,
@@ -122,42 +38,51 @@ class MainView extends Component {
 
     generateData = () => {
 
-        let numData = Array.from({ length: 8 }, () => Math.floor(Math.random() * 40));
+        let numData = Array.from({ length: 20 }, (a, index) => { return index === 19 ? 10 : Math.floor(Math.random() * 500) + this.state.finalMonthly });
         return numData;
     }
 
     updateChartData() {
 
-        let newData = {
-            labels: ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'],
+        if (!this.state.plans || !this.state.plans.length) return;
+        const backgroundColors = ['#42A5F5', '#66BB6A', '#66BB6A'];
+        const borderColors = ['#42A5F5', '#66BB6A', '#66BB6A'];
 
-            datasets: [
-                {
-                    label: 'Plan #1',
-                    data: this.generateData(),
-                    fill: false,
-                    backgroundColor: '#42A5F5',
-                    borderColor: '#42A5F5'
-                },
-                {
-                    label: 'Plan #2',
-                    data: this.generateData(),
-                    fill: false,
-                    backgroundColor: '#66BB6A',
-                    borderColor: '#66BB6A'
-                }
-                ,
-                {
-                    label: 'Plan #3',
-                    data: this.generateData(),
-                    fill: false,
-                    backgroundColor: '#66BB6A',
-                    borderColor: '#66BB6A'
-                }
-            ]
+        const dataSets = Array.from({ length: this.state.plans.length }, (a, index) => {
+            return {
+                label: 'Loan #' + (index + 1),
+                data: this.generateData(),
+                fill: false,
+                backgroundColor: backgroundColors[index],
+                borderColor: borderColors[index]
+            }
+        });
+        const years = Array.from({ length: dataSets[0].data.length }, (a, index) => { return 2019 + index });
+        let newData = {
+            labels: years,
+            datasets: dataSets
         }
 
         this.setState({ selectedChartData: newData });
+    }
+
+
+    getNewPlan = (length) => {
+        return {
+            id: length,
+            plan: 1,
+            planGrace: null,
+            planReturn: 1,
+            //amount: Math.round(this.state.finalAmount / totalPlans),
+            amount: 0,
+            duration: 10,
+            intrest: 0.1,
+            years: 10,
+            graceYears: 10,
+            resultReturn: 0,
+            resultTotal: 0,
+            resultMonthly: 0,
+        }
     }
 
     componentDidMount() {
@@ -167,41 +92,29 @@ class MainView extends Component {
 
         const totalPlans = 3;
 
-        let plans = []
-        for (let i = 0; i < totalPlans; i++) {
-            let newPlan = {
-                id: i,
-                plan: 1,
-                planGrace: null,
-                planReturn: 1,
-                amount: Math.round(this.state.finalAmount / totalPlans),
-                duration: 10,
-                intrest: 0.1,
-                years: 10,
-                graceYears: 10,
-                resultReturn:0,
-                resultTotal:0,
-                resultMonthly:0,
-            }
-            plans.push(newPlan);
-        }
+        let plans = Array.from({ length: totalPlans }, (a, index) => this.getNewPlan(index));
 
         this.setState({ plans: plans });
+        this.updateChartData();
+
+        setTimeout(() => {
+            this.updatePlans();
+        }, 100);
     }
 
     updatePlans() {
         let plans = [...this.state.plans];
 
-        plans.forEach(plan => {
-            plan.amount = Math.round(this.state.finalAmount / plans.length);
-
-            plan.resultMonthly = Math.round(this.state.finalMonthly / plans.length);
-            plan.resultTotal = plan.amount;
+        plans.forEach((plan, index) => {
+            plan.id = index + 1
+            plan.amount = Math.round(this.state.finalAmount / plans.length).toLocaleString();
+            plan.resultMonthly = Math.round(this.state.finalMonthly / plans.length).toLocaleString();
+            plan.resultTotal = plan.amount ? plan.amount.toLocaleString() : '0'
             plan.resultReturn = plan.intrest;
         })
 
         this.setState({ plans: plans });
-        
+
         this.updateChartData();
     }
 
@@ -231,9 +144,30 @@ class MainView extends Component {
         newPlans.filter(a => a === data).forEach(a => { data[event.target.name] = event.value })
         this.setState({ plans: newPlans });
 
-       
-        //this.updateChartData();
         this.updatePlans();
+    }
+
+    addNewTrack = () => {
+        let newPlans = [...this.state.plans];
+        newPlans.push(this.getNewPlan(newPlans.length + 1))
+        this.setState({ plans: newPlans });
+
+        setTimeout(() => {
+            this.updatePlans();
+        }, 100);
+    }
+
+    onRemoveTrack(event, id) {
+        if (this.state.plans.length > 1) {
+            let newPlans = [...this.state.plans];
+            newPlans.splice(id - 1, 1);
+
+            this.setState({ plans: newPlans });
+
+            setTimeout(() => {
+                this.updatePlans();
+            }, 100);
+        }
     }
 
     render() {
@@ -271,23 +205,29 @@ class MainView extends Component {
 
                     <div className="p-grid p-fluid">
                         {/* <header className="card-title">Mortgage plans</header> */}
-                        <CardHeader title='Mortgage plans'></CardHeader>
+                        <CardHeader title='Mortgage tracks'></CardHeader>
                         <div className="card-content">
                             <div>
-                                {this.state.plans.map(data => {
-                                    return (
-                                        <PlanRow
-                                            id={data.id}
-                                            key={data.id}
-                                            data={data}
-                                            showHeader={!data.id}
-                                            onParamChange={(event) => this.onParamChange(event, data)}
-                                            changeSlider={(event) => this.onSliderChange(event, data, 'years')}
-                                            changeSlider2={(event) => this.onSliderChange(event, data, 'graceYears')}
-                                        >
-                                        </PlanRow>);
-                                })
-                                }
+                                <div>
+                                    {this.state.plans.map(data => {
+                                        return (
+                                            <PlanRow
+                                                id={data.id}
+                                                key={data.id}
+                                                data={data}
+                                                showHeader={data.id === 1}
+                                                onParamChange={(event) => this.onParamChange(event, data)}
+                                                changeSlider={(event) => this.onSliderChange(event, data, 'years')}
+                                                changeSlider2={(event) => this.onSliderChange(event, data, 'graceYears')}
+                                                removeTrack={(event) => this.onRemoveTrack(event, data.id)}
+                                            >
+                                            </PlanRow>);
+                                    })
+                                    }
+                                </div>
+                                <div style={{ margin: '5px 0' }}>
+                                    <Button style={{ width: '100%' }} className="p-button-secondary p-button-raised" onClick={this.addNewTrack} icon="pi pi-plus" label="add track" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -325,7 +265,8 @@ class MainView extends Component {
                             <div className="plan-header">
                                 <SelectButton value={this.state.secnario} options={scenarioItems} onChange={(e) => {
                                     this.setState({ secnario: e.value });
-                                    this.setState({ selectedChartData: dataSets[e.value] });
+                                    //this.setState({ selectedChartData: dataSets[e.value] });
+                                    this.updateChartData()
                                 }}></SelectButton>
 
                                 <Button tooltip='Edit Scenario' style={{ marginLeft: '5px' }} icon="pi pi-pencil" />

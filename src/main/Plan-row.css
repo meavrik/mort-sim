@@ -8,12 +8,13 @@
     text-align: left;
 }
 
-.drpdown_and_title {
+.row-column {
     /* display: grid; */
     text-align: center;
+    min-width: 30px;
 }
 
-.result-section{
+.result-section {
     background-color: #e4dbdb;
     display: flex;
     margin-left: 10px;
@@ -23,7 +24,16 @@
 }
 
 .column-title {
+    /* min-height: 30px; */
     padding: 5px 0;
     background-color: #e4dbdb;
     border-bottom: 2px solid black;
+}
+
+.remove-button {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    cursor: pointer;
 }
